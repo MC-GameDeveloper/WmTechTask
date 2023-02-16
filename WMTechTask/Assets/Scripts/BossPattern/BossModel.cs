@@ -1,6 +1,14 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+
+[System.Serializable]
+public struct BossPhaseStruct
+{
+    public int healthThreshold;
+    public BossModel.PhaseState phaseState;
+}
 
 public class BossModel : MonoBehaviour
 {
@@ -10,6 +18,7 @@ public class BossModel : MonoBehaviour
     public UnityEvent onBossDeath;
     public int health;
     public float speed;
+    public List<BossPhaseStruct> phases;
 
     private int _currentHealth;
 
@@ -29,25 +38,18 @@ public class BossModel : MonoBehaviour
     public void TakeDamage(int amount)
     {
         _currentHealth -= amount;
-        
-        if (_currentHealth > health * 0.6f)
+        foreach (var phase in phases)
         {
-            PhaseChange(PhaseState.PhaseOne);
+            if (_currentHealth <= phase.healthThreshold)
+            {
+                PhaseChange(phase.phaseState);
+            }
         }
-        else if(_currentHealth > health * 0.3f)
-        {
-            PhaseChange(PhaseState.PhaseTwo);
-        }
-        else if (_currentHealth > 0)
-        {
-            PhaseChange(PhaseState.PhaseThree);
-        }
-        else
+
+        if (_currentHealth <= 0)
         {
             onBossDeath?.Invoke();
         }
-        
-        Debug.Log($"Boss Health: {_currentHealth}");
     }
 
     private void PhaseChange(PhaseState newPhase)

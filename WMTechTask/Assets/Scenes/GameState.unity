@@ -506,6 +506,11 @@ MonoBehaviour:
       m_Calls: []
   health: 90
   speed: 1
+  phases:
+  - healthThreshold: 60
+    phaseState: 1
+  - healthThreshold: 30
+    phaseState: 2
   currentState: 0
 --- !u!114 &1317113863
 MonoBehaviour:
