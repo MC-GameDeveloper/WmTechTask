@@ -8,20 +8,18 @@ public class PlayerModel : MonoBehaviour
     //public 
     public float moveSpeed;
     public float dashDistance;
-    
-    
-    //private
-    private Rigidbody2D _rb;
-
-    
-    void Start()
-    {
-        _rb = GetComponent<Rigidbody2D>();
-    }
+    public LayerMask obstacleLayer;
 
     public void Attack(Vector3 movement)
     {
-        transform.position += movement * dashDistance * Time.deltaTime;
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, movement, dashDistance * Time.fixedDeltaTime, obstacleLayer);
+        Debug.DrawRay(transform.position, movement * dashDistance * Time.fixedDeltaTime, Color.red, 3f);
+        transform.position += movement * dashDistance * Time.fixedDeltaTime;
+
+        if (hit.collider != null)
+        {
+            Debug.Log($"{hit.collider.gameObject.name}");
+        }
     }
 
     public void Move(Vector3 movement)

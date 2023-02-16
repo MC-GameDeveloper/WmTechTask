@@ -4,20 +4,26 @@ using UnityEngine;
 
 public class PlayerView : MonoBehaviour
 {
-    public GameObject dashTrail;
+    private TrailRenderer _dashTrail;
 
-    public async void Dash(Vector3 movement, Vector3 position)
+    private void Start()
     {
-        dashTrail.SetActive(true);
-        dashTrail.transform.position = position;
-        dashTrail.transform.rotation = Quaternion.LookRotation(Vector3.forward, movement);
-        await Task.Delay(1000);
-        dashTrail.SetActive(false);
+        _dashTrail = GetComponent<TrailRenderer>();
+        _dashTrail.emitting = false;
+    }
+
+    public async void Dash()
+    {
+        _dashTrail.emitting = true;
+        await Task.Delay(TimeSpan.FromSeconds(_dashTrail.time));
+        _dashTrail.emitting = false;
     }
     
-    void OnDrawGizmos()
-    {
-        Vector3 forward = transform.TransformDirection(Vector3.up) * 10;
-        Debug.DrawRay(transform.position, forward, Color.green);
-    }
+    
+    //TODO: leave in to show process
+    // void OnDrawGizmos()
+    // {
+    //     Vector3 forward = transform.TransformDirection(Vector3.up) * 10;
+    //     Debug.DrawRay(transform.position, forward, Color.green);
+    // }
 }

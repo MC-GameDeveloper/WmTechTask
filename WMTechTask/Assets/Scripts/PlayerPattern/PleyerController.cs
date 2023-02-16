@@ -6,7 +6,7 @@ public class PleyerController : MonoBehaviour
     public float attackCooldown = 1;
     
     private PlayerModel _playerModel;
-    private PlayerView _playerview;
+    private PlayerView _playerView;
     private Vector2 _movement;
 
     private float _lastDashTime = -999f;
@@ -15,7 +15,7 @@ public class PleyerController : MonoBehaviour
     private void Start()
     {
         _playerModel = GetComponent<PlayerModel>();
-        _playerview = GetComponent<PlayerView>();
+        _playerView = GetComponent<PlayerView>();
         _camera = Camera.main;
     }
     
@@ -33,18 +33,19 @@ public class PleyerController : MonoBehaviour
                 return;
             }
             
-            _playerview.Dash(_movement, transform.position);
+            _playerView.Dash();
             _playerModel.Attack(_movement);
             _lastDashTime = Time.time;
         }
         
-        //Handle look 
-        var mp = Input.mousePosition;
-        mp.z = 10;
-        Vector3 mousePos = _camera.ScreenToWorldPoint(mp);
-        
-        Vector3 direction = mousePos - transform.position;
-        Quaternion lookRotation = Quaternion.LookRotation(Vector3.forward, direction);
-        transform.rotation = lookRotation;
+        //TODO: leave in to show thought process
+        // //Handle look 
+        // var mp = Input.mousePosition;
+        // mp.z = 10;
+        // Vector3 mousePos = _camera.ScreenToWorldPoint(mp);
+        //
+        // Vector3 direction = mousePos - transform.position;
+        // Quaternion lookRotation = Quaternion.LookRotation(Vector3.forward, direction);
+        // transform.rotation = lookRotation;
     }
 }
