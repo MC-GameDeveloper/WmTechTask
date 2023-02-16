@@ -1,39 +1,59 @@
-public class BossModel
-{
-    public int health;
-    public int damage;
-    public float speed;
-    public bool isAttacking;
-    public bool isAlive;
+using System;
+using UnityEngine;
+using UnityEngine.Events;
 
-    public BossModel(int health, int damage, float speed)
+public class BossModel : MonoBehaviour
+{
+    [HideInInspector]
+    public UnityEvent<PhaseState> onPhaseChange;
+    [HideInInspector]
+    public UnityEvent onBossDeath;
+    public int health;
+    public float speed;
+
+    private int _currentHealth;
+
+    private void Start()
     {
-        this.health = health;
-        this.damage = damage;
-        this.speed = speed;
-        isAttacking = false;
-        isAlive = true;
+        _currentHealth = health;
     }
 
+    public enum PhaseState
+    {
+        PhaseOne,
+        PhaseTwo,
+        PhaseThree
+    }
+    public PhaseState currentState;
+    
     public void TakeDamage(int amount)
     {
-        health -= amount;
-        if (health <= 0)
+        _currentHealth -= amount;
+        
+        if (_currentHealth > health * 0.6f)
         {
-            isAlive = false;
+            PhaseChange(PhaseState.PhaseOne);
         }
+        else if(_currentHealth > health * 0.3f)
+        {
+            PhaseChange(PhaseState.PhaseTwo);
+        }
+        else if (_currentHealth > 0)
+        {
+            PhaseChange(PhaseState.PhaseThree);
+        }
+        else
+        {
+            onBossDeath?.Invoke();
+        }
+        
+        Debug.Log($"Boss Health: {_currentHealth}");
     }
 
-    public void StartAttack()
+    private void PhaseChange(PhaseState newPhase)
     {
-        isAttacking = true;
+        currentState = newPhase;
+        onPhaseChange?.Invoke(currentState);
     }
-
-    public void EndAttack()
-    {
-        isAttacking = false;
-    }
-
-    // Other methods for controlling the boss's movement and attack patterns
 }
 
