@@ -1,5 +1,6 @@
+[System.Serializable]
 public struct BossPhase
 {
-    public float healthThreshold;
-    public BossModel.PhaseState phaseState;  
+    public int healthThreshold;
+    public BossModel.PhaseState phaseState;
 }

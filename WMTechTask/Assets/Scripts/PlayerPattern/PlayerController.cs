@@ -5,22 +5,22 @@ using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
+    //Events
     [HideInInspector] 
     public UnityEvent<int> onAttack;
-
-    public float attackCooldown = 1;
-
+    [HideInInspector] 
+    public UnityEvent onPlayerDeath;
+    //Public
     public BossController bossController;
-    
+
+    //Private
     private PlayerModel _playerModel;
     private PlayerView _playerView;
     private Vector2 _movement;
-
     private float _lastDashTime = -999f;
-
     private CancellationTokenSource _cancellationToken;
     
-    private void Start()
+    private void Awake()
     {
         _playerModel = GetComponent<PlayerModel>();
         _playerView = GetComponent<PlayerView>();
@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
         _playerModel.Move(_movement);
 
         // Handle attacking input
-        if (Input.GetKeyDown("space") && _movement.magnitude != 0 && Time.time > _lastDashTime + attackCooldown)
+        if (Input.GetKeyDown("space") && _movement.magnitude != 0 && Time.time > _lastDashTime + _playerModel.attackCooldown)
         {
             _cancellationToken?.Dispose();
             _cancellationToken = new CancellationTokenSource();
@@ -63,13 +63,21 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            _playerView.TakeDamage();
             _playerModel.TakeDamage(bossController.damage);
         }
+    }
+    
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        _playerView.TakeDamage();
+        _playerModel.TakeDamage(bossController.damage);
     }
 
     private void HandlePlayerDeath()
     {
         Debug.Log("Player Died");
+        onPlayerDeath?.Invoke();
         Destroy(gameObject);
     }
 }

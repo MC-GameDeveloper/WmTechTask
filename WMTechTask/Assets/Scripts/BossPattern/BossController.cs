@@ -4,25 +4,30 @@ using UnityEngine;
 
 public class BossController : MonoBehaviour
 {
+    //public
     public PlayerController playerController;
-
-    public int damage = 3;
     public List<GameObject> spikes;
+    [HideInInspector]
+    public int damage;
     
+    //private
     private BossModel _bossModel;
     private BossView _bossView;
-
+    private bool _playerIsAlive = true;
     private Quaternion _desiredRotation;
     
-    private void Start()
+    private void Awake()
     {
         _bossModel = GetComponent<BossModel>();
         _bossView = GetComponent<BossView>();
-
+        
+        damage = _bossModel.damage;
+        
         _bossModel.onBossDeath.AddListener(HandleBossDeath);
         _bossModel.onPhaseChange.AddListener(HandlePhaseChange);
         
         playerController.onAttack.AddListener(HandleAttack);
+        playerController.onPlayerDeath.AddListener(HandlePlayerDeath);
 
         for (int i = 0; i < spikes.Count; i++)
         {
@@ -43,10 +48,12 @@ public class BossController : MonoBehaviour
         _bossModel.onPhaseChange.RemoveListener(HandlePhaseChange);
         
         playerController.onAttack.RemoveListener(HandleAttack);
+        playerController.onPlayerDeath.RemoveListener(HandlePlayerDeath);
     }
 
     private void HandleAttack(int dmg)
     {
+        _bossView.TakeDamage();
         _bossModel.TakeDamage(dmg);
     }
 
@@ -74,9 +81,16 @@ public class BossController : MonoBehaviour
         Debug.Log("Boss Died");
         Destroy(gameObject);
     }
+
+    private void HandlePlayerDeath()
+    {
+        _playerIsAlive = false;
+    }
     
     public void Update()
     {
+        if (!_playerIsAlive) return;
+        
         //make boss look at player
         Vector3 playerDir = playerController.transform.position - transform.position;
         playerDir.z = 0.0f;

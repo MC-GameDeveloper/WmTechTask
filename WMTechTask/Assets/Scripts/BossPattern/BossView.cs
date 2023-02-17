@@ -1,9 +1,15 @@
+using System;
 using UnityEngine;
 
 public class BossView : MonoBehaviour
 {
-    public SpriteRenderer spriteRenderer;
-    public Animator animator;
+    [SerializeField] private AnimationCurve animCurve;
+    private SpriteRenderer _spriteRenderer;
+    
+    private void Awake()
+    {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+    }
 
     public void UpdateHealth(int health)
     {
@@ -12,16 +18,7 @@ public class BossView : MonoBehaviour
 
     public void TakeDamage()
     {
-        // Play a sound effect or animation when the boss takes damage
-    }
-
-    public void StartAttack()
-    {
-        // Play an attack animation or other visual effect
-    }
-
-    public void EndAttack()
-    {
-        // Stop the attack animation or other visual effect
+        Debug.Log("playerView damage");
+        Utilities.DamageAnimation(_spriteRenderer, animCurve);
     }
 }

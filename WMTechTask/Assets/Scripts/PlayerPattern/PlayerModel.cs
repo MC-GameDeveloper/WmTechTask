@@ -16,14 +16,8 @@ public class PlayerModel : MonoBehaviour
     public LayerMask obstacleLayer;
     public int dmg = 10;
     public int health = 10;
-
-    private Rigidbody2D _rb;
-
-    private void Start()
-    {
-        _rb = GetComponent<Rigidbody2D>();
-    }
-
+    public float attackCooldown = 1;
+    
     public void Attack(Vector3 movement)
     {
         RaycastHit2D hit = Physics2D.Raycast(transform.position, movement, dashDistance * Time.fixedDeltaTime, obstacleLayer);
@@ -43,10 +37,6 @@ public class PlayerModel : MonoBehaviour
         transform.position += movement * moveSpeed * Time.deltaTime;
     }
     
-    private void OnTriggerEnter2D(Collider2D col)
-    {
-        TakeDamage(3);
-    }
     
     public void TakeDamage(int amount)
     {
