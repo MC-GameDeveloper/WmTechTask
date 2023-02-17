@@ -15,7 +15,7 @@ public class BossController : MonoBehaviour
     private BossView _bossView;
     private bool _playerIsAlive = true;
     private Quaternion _desiredRotation;
-    
+
     private void Awake()
     {
         _bossModel = GetComponent<BossModel>();
@@ -40,6 +40,8 @@ public class BossController : MonoBehaviour
                 spikes[i].SetActive(false);
             }
         }
+        
+        _bossView.InitializeHealthBar(_bossModel.maxHealth);
     }
 
     private void OnDestroy()
@@ -55,6 +57,7 @@ public class BossController : MonoBehaviour
     {
         _bossView.TakeDamage();
         _bossModel.TakeDamage(dmg);
+        _bossView.UpdateHealth(_bossModel.currentHealth);
     }
 
     private void HandlePhaseChange(BossModel.PhaseState phase)

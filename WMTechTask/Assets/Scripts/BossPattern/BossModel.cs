@@ -12,7 +12,9 @@ public class BossModel : MonoBehaviour
     public UnityEvent onBossDeath;
     
     //public
-    public int health;
+    public int maxHealth;
+    [HideInInspector]
+    public int currentHealth;
     public float speed;
     public List<BossPhase> phases;
     public int damage = 3;
@@ -26,30 +28,28 @@ public class BossModel : MonoBehaviour
     public PhaseState currentState;
     
     //private 
-    private int _currentHealth;
+    
     
     private void Awake()
     {
-        _currentHealth = health;
+        currentHealth = maxHealth;
     }
     
     public void TakeDamage(int amount)
     {
-        _currentHealth -= amount;
+        currentHealth -= amount;
         foreach (var phase in phases)
         {
-            if (_currentHealth <= phase.healthThreshold)
+            if (currentHealth <= phase.healthThreshold)
             {
                 PhaseChange(phase.phaseState);
             }
         }
 
-        if (_currentHealth <= 0)
+        if (currentHealth <= 0)
         {
             onBossDeath?.Invoke();
         }
-        
-        Debug.Log($"MTC: {_currentHealth}, {currentState}");
     }
 
     private void PhaseChange(PhaseState newPhase)

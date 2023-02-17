@@ -6,9 +6,13 @@ using UnityEngine.UI;
 
 public class PlayerView : MonoBehaviour
 {
-    [SerializeField] private AnimationCurve animCurve;
-    private TrailRenderer _dashTrail;
     
+    //Private
+    [SerializeField] 
+    private AnimationCurve animCurve;
+    [SerializeField] 
+    private Slider _healthBar;
+    private TrailRenderer _dashTrail;
     private SpriteRenderer _spriteRenderer;
 
     private void Awake()
@@ -17,6 +21,11 @@ public class PlayerView : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
 
         _dashTrail.emitting = false;
+    }
+
+    public void InitializeHealthBar(int health)
+    {
+        _healthBar.value = _healthBar.maxValue = health;
     }
 
     public async void Dash(CancellationTokenSource cancellationToken)
@@ -28,12 +37,12 @@ public class PlayerView : MonoBehaviour
 
     public void TakeDamage()
     {
-        Debug.Log("playerView damage");
         Utilities.DamageAnimation(_spriteRenderer, animCurve);
     }
     
     public void UpdateHealth(int health)
     {
-        // Update the players' health bar or other visual elements
+        Debug.Log(health);
+        _healthBar.value = health;
     }
 }

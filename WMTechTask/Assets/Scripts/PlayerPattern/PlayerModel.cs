@@ -17,7 +17,18 @@ public class PlayerModel : MonoBehaviour
     public int dmg = 10;
     public int health = 10;
     public float attackCooldown = 1;
+
+
+    private Vector2 _screenBoundaries;
+    private Vector2 _objectBounds;
     
+    private void Start()
+    {
+        _screenBoundaries =
+            Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
+        _objectBounds = GetComponent<SpriteRenderer>().bounds.size / 2;
+    }
+
     public void Attack(Vector3 movement)
     {
         RaycastHit2D hit = Physics2D.Raycast(transform.position, movement, dashDistance * Time.fixedDeltaTime, obstacleLayer);
@@ -28,13 +39,16 @@ public class PlayerModel : MonoBehaviour
         if (hit.collider != null)
         {
             onAttack?.Invoke(dmg, hit.collider.gameObject);
-            Debug.Log($"{hit.collider.gameObject.name}");
         }
     }
 
     public void Move(Vector3 movement)
     {
         transform.position += movement * moveSpeed * Time.deltaTime;
+        
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, _screenBoundaries.x + _objectBounds.x, _screenBoundaries.x * -1 -  _objectBounds.x),
+                                Mathf.Clamp(transform.position.y, _screenBoundaries.y +  _objectBounds.y, _screenBoundaries.y * -1 -  _objectBounds.y),
+                                0);
     }
     
     

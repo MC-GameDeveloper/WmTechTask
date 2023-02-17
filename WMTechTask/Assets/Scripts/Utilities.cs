@@ -5,7 +5,6 @@ public static class Utilities
 {
         public static void DamageAnimation(SpriteRenderer target, AnimationCurve animCurve)
         {
-                Debug.Log("DamageAnimation");
-                Tween.Color(target, target.color, Color.red, 2, 0, animCurve);
+                Tween.Color(target, Color.white, Color.red, 2, 0, animCurve);
         }
 }

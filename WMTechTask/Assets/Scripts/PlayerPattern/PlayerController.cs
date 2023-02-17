@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     private float _lastDashTime = -999f;
     private CancellationTokenSource _cancellationToken;
     
+    
     private void Awake()
     {
         _playerModel = GetComponent<PlayerModel>();
@@ -27,6 +28,8 @@ public class PlayerController : MonoBehaviour
         
         _playerModel.onAttack.AddListener(HandleAttack);
         _playerModel.onPlayerDeath.AddListener(HandlePlayerDeath);
+        
+        _playerView.InitializeHealthBar(_playerModel.health);
     }
 
     private void OnDestroy()
@@ -45,7 +48,9 @@ public class PlayerController : MonoBehaviour
         _playerModel.Move(_movement);
 
         // Handle attacking input
-        if (Input.GetKeyDown("space") && _movement.magnitude != 0 && Time.time > _lastDashTime + _playerModel.attackCooldown)
+        if (Input.GetKeyDown("space") && 
+            _movement.magnitude != 0 && 
+            Time.time > _lastDashTime + _playerModel.attackCooldown)
         {
             _cancellationToken?.Dispose();
             _cancellationToken = new CancellationTokenSource();
@@ -63,15 +68,20 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            _playerView.TakeDamage();
-            _playerModel.TakeDamage(bossController.damage);
+            HandleDamage();
         }
     }
     
     private void OnTriggerEnter2D(Collider2D col)
     {
+        HandleDamage();   
+    }
+
+    private void HandleDamage()
+    {
         _playerView.TakeDamage();
         _playerModel.TakeDamage(bossController.damage);
+        _playerView.UpdateHealth(_playerModel.health);
     }
 
     private void HandlePlayerDeath()

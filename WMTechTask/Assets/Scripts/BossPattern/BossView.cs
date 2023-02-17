@@ -1,8 +1,10 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BossView : MonoBehaviour
 {
+    [SerializeField] Slider _healthBar;
     [SerializeField] private AnimationCurve animCurve;
     private SpriteRenderer _spriteRenderer;
     
@@ -11,14 +13,18 @@ public class BossView : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
+    public void InitializeHealthBar(int health)
+    {
+        _healthBar.value = _healthBar.maxValue = health;
+    }
+
     public void UpdateHealth(int health)
     {
-        // Update the boss's health bar or other visual elements
+        _healthBar.value = health;
     }
 
     public void TakeDamage()
     {
-        Debug.Log("playerView damage");
         Utilities.DamageAnimation(_spriteRenderer, animCurve);
     }
 }
