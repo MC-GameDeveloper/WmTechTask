@@ -24,9 +24,13 @@ public class PlayerModel : MonoBehaviour
     
     private void Start()
     {
-        _screenBoundaries =
-            Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
+        float height = 2f * Camera.main.orthographicSize;
+        float width = height * Camera.main.aspect;
+        Vector3 topRight = new Vector3(Camera.main.transform.position.x + width / 2f, Camera.main.transform.position.y + height / 2f, Camera.main.transform.position.z);
+        _screenBoundaries = Camera.main.ScreenToWorldPoint(topRight);
+        
         _objectBounds = GetComponent<SpriteRenderer>().bounds.size / 2;
+        
     }
 
     public void Attack(Vector3 movement)
@@ -46,8 +50,8 @@ public class PlayerModel : MonoBehaviour
     {
         transform.position += movement * moveSpeed * Time.deltaTime;
         
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x, _screenBoundaries.x + _objectBounds.x, _screenBoundaries.x * -1 -  _objectBounds.x),
-                                Mathf.Clamp(transform.position.y, _screenBoundaries.y +  _objectBounds.y, _screenBoundaries.y * -1 -  _objectBounds.y),
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -_screenBoundaries.x, _screenBoundaries.x),
+                                Mathf.Clamp(transform.position.y, -_screenBoundaries.y + 2, _screenBoundaries.y),
                                 0);
     }
     
