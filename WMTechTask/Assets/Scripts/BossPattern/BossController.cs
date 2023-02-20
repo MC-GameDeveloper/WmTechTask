@@ -9,11 +9,11 @@ public class BossController : MonoBehaviour
     public List<GameObject> spikes;
     [HideInInspector]
     public int damage;
+    public bool playerIsAlive = true;
     
     //private
     private BossModel _bossModel;
     private BossView _bossView;
-    private bool _playerIsAlive = true;
     private Quaternion _desiredRotation;
 
     private void Awake()
@@ -27,18 +27,10 @@ public class BossController : MonoBehaviour
         _bossModel.onPhaseChange.AddListener(HandlePhaseChange);
         
         playerController.onAttack.AddListener(HandleAttack);
-        playerController.onPlayerDeath.AddListener(HandlePlayerDeath);
 
         for (int i = 0; i < spikes.Count; i++)
         {
-            if (i == 0)
-            {
-                spikes[i].SetActive(true);
-            }
-            else
-            {
-                spikes[i].SetActive(false);
-            }
+            spikes[i].SetActive(i == 0);
         }
         
         _bossView.InitializeHealthBar(_bossModel.maxHealth);
@@ -50,7 +42,6 @@ public class BossController : MonoBehaviour
         _bossModel.onPhaseChange.RemoveListener(HandlePhaseChange);
         
         playerController.onAttack.RemoveListener(HandleAttack);
-        playerController.onPlayerDeath.RemoveListener(HandlePlayerDeath);
     }
 
     private void HandleAttack(int dmg)
@@ -82,34 +73,24 @@ public class BossController : MonoBehaviour
     private void HandleBossDeath()
     {
         Debug.Log("Boss Died");
+        StateManager.Instance.OnGameFinished?.Invoke(true);
         Destroy(gameObject);
     }
 
-    private void HandlePlayerDeath()
-    {
-        _playerIsAlive = false;
-    }
-    
     public void Update()
     {
-        if (!_playerIsAlive) return;
+        if (!playerIsAlive) return;
         
         //make boss look at player
         Vector3 playerDir = playerController.transform.position - transform.position;
         playerDir.z = 0.0f;
         Quaternion targetRotation = Quaternion.FromToRotation(-Vector3.up, playerDir);
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * _bossModel.speed);
-
+        
+        //make boss move toward player
         if (_bossModel.currentState == BossModel.PhaseState.PhaseThree)
         {
             transform.position = Vector3.MoveTowards(transform.position, playerController.transform.position, _bossModel.speed * 1.5f * Time.deltaTime);
         }
-    }
-
-    void LateUpdate()
-    {
-        // Update the boss view based on the current state of the boss model
-        // For example, if the boss's health has changed, call bossView.UpdateHealth(bossModel.health)
-        // If the boss is attacking, call bossView.StartAttack() and bossModel.EndAttack() when the attack is over
     }
 }

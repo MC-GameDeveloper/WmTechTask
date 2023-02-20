@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using Pixelplacement;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,8 +9,7 @@ public class PlayerController : MonoBehaviour
     //Events
     [HideInInspector] 
     public UnityEvent<int> onAttack;
-    [HideInInspector] 
-    public UnityEvent onPlayerDeath;
+
     //Public
     public BossController bossController;
 
@@ -43,6 +43,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (Time.timeScale <= 0) return;
+        
         // Handle movement input
         _movement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
         _playerModel.Move(_movement);
@@ -87,7 +89,8 @@ public class PlayerController : MonoBehaviour
     private void HandlePlayerDeath()
     {
         Debug.Log("Player Died");
-        onPlayerDeath?.Invoke();
+        bossController.playerIsAlive = false;
+        StateManager.Instance.OnGameFinished?.Invoke(false);
         Destroy(gameObject);
     }
 }

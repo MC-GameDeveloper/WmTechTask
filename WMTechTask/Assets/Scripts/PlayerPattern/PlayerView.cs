@@ -7,6 +7,9 @@ using UnityEngine.UI;
 public class PlayerView : MonoBehaviour
 {
     
+    //Public
+    public GameObject pauseScreen;
+    
     //Private
     [SerializeField] 
     private AnimationCurve animCurve;
@@ -44,5 +47,11 @@ public class PlayerView : MonoBehaviour
     {
         Debug.Log(health);
         _healthBar.value = health;
+    }
+
+    public void Pause()
+    {
+        StateManager.Instance.OnPause?.Invoke();
+        pauseScreen.SetActive(true);
     }
 }
