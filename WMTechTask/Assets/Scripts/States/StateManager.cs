@@ -1,7 +1,9 @@
 using Pixelplacement;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
+//A singleton pattern used to keep game state logic separate from gameplay logic
 public class StateManager : StateMachine
 {
     //Events
@@ -15,6 +17,9 @@ public class StateManager : StateMachine
     //Public
     public bool playerWon;
     
+    //Private
+    [SerializeField] private Image fadeScreen;
+
     //Singleton
     private static StateManager _instance;
 
@@ -33,8 +38,22 @@ public class StateManager : StateMachine
         }
     }
 
+    public void TransitionToStateAsync(Utilities.GameState state, float delay = 0)
+    {
+        Tween.Color(fadeScreen, Vector4.zero, new Color(0, 0, 0, 1f), 0.5f, delay, Tween.EaseLinear, 
+            startCallback: () =>
+            {
+                fadeScreen.enabled = true;
+            },
+            completeCallback: () =>
+            {
+                ChangeState((int)state);
+                Tween.Color(fadeScreen, new Color(0, 0, 0, 1f), Vector4.zero, 0.5f, 0, Tween.EaseLinear, completeCallback: () => { fadeScreen.enabled = false;});
+            });
+    }
+
     public void GoToMainMenu()
     {
-        ChangeState((int)Utilities.GameState.StartState);
+        TransitionToStateAsync(Utilities.GameState.StartState);
     }
 }

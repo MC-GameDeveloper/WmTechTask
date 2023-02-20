@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
+//this class manages boss related UI and visuals
 public class BossView : MonoBehaviour
 {
     [SerializeField] Slider _healthBar;

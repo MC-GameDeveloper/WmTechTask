@@ -242,7 +242,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playAgain: {fileID: 1348169690}
   _quitButton: {fileID: 764958779}
-  winText: {fileID: 1431169257}
+  _winText: {fileID: 1431169257}
 --- !u!1 &195098858
 GameObject:
   m_ObjectHideFlags: 0

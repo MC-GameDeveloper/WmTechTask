@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+//This class manages boss data
 public class BossModel : MonoBehaviour
 {
     //events
@@ -26,10 +27,7 @@ public class BossModel : MonoBehaviour
     }
     [HideInInspector]
     public PhaseState currentState;
-    
-    //private 
-    
-    
+
     private void Awake()
     {
         currentHealth = maxHealth;

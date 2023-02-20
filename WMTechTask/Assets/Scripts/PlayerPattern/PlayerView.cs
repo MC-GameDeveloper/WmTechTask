@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
+//this class manages player UI and visuals
 public class PlayerView : MonoBehaviour
 {
     
@@ -45,7 +46,6 @@ public class PlayerView : MonoBehaviour
     
     public void UpdateHealth(int health)
     {
-        Debug.Log(health);
         _healthBar.value = health;
     }
 

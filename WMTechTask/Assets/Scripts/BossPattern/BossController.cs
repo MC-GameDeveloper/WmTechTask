@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+//this class manages the logic for the boss, controlling the model and the view
 public class BossController : MonoBehaviour
 {
     //public
@@ -72,7 +72,6 @@ public class BossController : MonoBehaviour
 
     private void HandleBossDeath()
     {
-        Debug.Log("Boss Died");
         StateManager.Instance.OnGameFinished?.Invoke(true);
         Destroy(gameObject);
     }

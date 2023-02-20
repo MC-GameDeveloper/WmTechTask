@@ -1,11 +1,8 @@
-using System;
 using Pixelplacement;
 using UnityEngine.SceneManagement;
 
 public class GameState : State
 {
-    
-    
     private void OnEnable()
     {
         SceneManager.LoadScene(nameof(GameState), LoadSceneMode.Additive);
@@ -24,6 +21,6 @@ public class GameState : State
     {
 
         StateManager.Instance.playerWon = playerWin;
-        ChangeState((int)Utilities.GameState.EndState);
+        StateManager.Instance.TransitionToStateAsync(Utilities.GameState.EndState, 0.25f);
     }
 }

@@ -1,9 +1,8 @@
-using System;
 using System.Threading;
-using Pixelplacement;
 using UnityEngine;
 using UnityEngine.Events;
 
+//This class manages player logic, and controls model and view
 public class PlayerController : MonoBehaviour
 {
     //Events
@@ -88,7 +87,6 @@ public class PlayerController : MonoBehaviour
 
     private void HandlePlayerDeath()
     {
-        Debug.Log("Player Died");
         bossController.playerIsAlive = false;
         StateManager.Instance.OnGameFinished?.Invoke(false);
         Destroy(gameObject);

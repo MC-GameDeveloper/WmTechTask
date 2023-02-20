@@ -1,11 +1,8 @@
-using System;
 using Pixelplacement;
 using UnityEngine.SceneManagement;
 
 public class IntroState : State
 {
-    
-    
     private void OnEnable()
     {
         SceneManager.LoadScene(nameof(IntroState), LoadSceneMode.Additive);
@@ -20,6 +17,6 @@ public class IntroState : State
 
     private void HandleStartGame()
     {
-        ChangeState((int)Utilities.GameState.GameState);
+        StateManager.Instance.TransitionToStateAsync(Utilities.GameState.GameState);
     }
 }
