@@ -4,37 +4,37 @@ using UnityEngine.UI;
 
 public class GameUIController : MonoBehaviour
 {
-    public GameObject pauseScreen;
-    public Button playButton;
-    public Button quitButton;
+    [SerializeField] private GameObject _pauseScreen;
+    [SerializeField] private Button _playButton;
+    [SerializeField] private Button _quitButton;
 
     private void OnEnable()
     {
-        playButton.onClick.AddListener(Play);
-        quitButton.onClick.AddListener(Quit);
+        _playButton.onClick.AddListener(Play);
+        _quitButton.onClick.AddListener(Quit);
     }
 
     private void OnDisable()
     {
-        playButton.onClick.RemoveListener(Play);
-        quitButton.onClick.RemoveListener(Quit);
+        _playButton.onClick.RemoveListener(Play);
+        _quitButton.onClick.RemoveListener(Quit);
     }
 
     private void Pause()
     {
-        pauseScreen.SetActive(true);
+        _pauseScreen.SetActive(true);
         Time.timeScale = 0;
     }
 
     private void Play()
     {
-        pauseScreen.SetActive(false);
+        _pauseScreen.SetActive(false);
         Time.timeScale = 1;
     }
 
     private void Quit()
     {
-        pauseScreen.SetActive(false);
+        _pauseScreen.SetActive(false);
         Time.timeScale = 1;
         StateManager.Instance.GoToMainMenu();
     }

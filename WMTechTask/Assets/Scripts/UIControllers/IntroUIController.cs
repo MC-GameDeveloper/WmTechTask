@@ -4,16 +4,16 @@ using UnityEngine.UI;
 
 public class IntroUIController : MonoBehaviour
 {
-    public Button startButton;
-    public Button quitButton;
+    [SerializeField] private Button _startButton;
+    [SerializeField] private Button _quitButton;
     private void OnEnable()
     {
-        startButton.onClick.AddListener(() => {StateManager.Instance.OnStartGame?.Invoke();});
-        quitButton.onClick.AddListener(Application.Quit);
+        _startButton.onClick.AddListener(() => {StateManager.Instance.OnStartGame?.Invoke();});
+        _quitButton.onClick.AddListener(Application.Quit);
     }
 
     private void OnDisable()
     {
-        quitButton.onClick.RemoveListener(Application.Quit);
+        _quitButton.onClick.RemoveListener(Application.Quit);
     }
 }

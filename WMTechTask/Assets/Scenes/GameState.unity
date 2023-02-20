@@ -1581,6 +1581,7 @@ MonoBehaviour:
   - {fileID: 1341423865}
   - {fileID: 257036766}
   damage: 3
+  playerIsAlive: 1
 --- !u!1 &1341423865
 GameObject:
   m_ObjectHideFlags: 0
@@ -1950,9 +1951,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5431b3bb9e294d778381fcc653c40697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseScreen: {fileID: 1736973181}
-  playButton: {fileID: 272172899}
-  quitButton: {fileID: 189083836}
+  _pauseScreen: {fileID: 1736973181}
+  _playButton: {fileID: 272172899}
+  _quitButton: {fileID: 189083836}
 --- !u!1 &1583442193
 GameObject:
   m_ObjectHideFlags: 0
@@ -2159,9 +2160,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   onAttack:
-    m_PersistentCalls:
-      m_Calls: []
-  onPlayerDeath:
     m_PersistentCalls:
       m_Calls: []
   bossController: {fileID: 1317113863}
